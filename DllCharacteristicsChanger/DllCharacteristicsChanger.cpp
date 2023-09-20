@@ -36,6 +36,8 @@ BOOL setFINTEGRITY(PIMAGE_OPTIONAL_HEADER Optional);
 BOOL removeFINTEGRITY(PIMAGE_OPTIONAL_HEADER Optional);
 /* TO DO: other options */
 
+
+#define AUTHOR "spyw4re"
 #define MZ "MZ"
 #define OPTION_SET_ASLR "-sA"
 #define OPTION_REMOVE_ASLR "-rA"
