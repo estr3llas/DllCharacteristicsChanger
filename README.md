@@ -1,4 +1,4 @@
-# DllCharacteristicsChanger
+# DllCharacteristicsChanger v0.0.1
 
 This is a tool to manipulate the DllCharacteristics field of a binary.</br>
 You can set/remove ASLR, DEP and Authenticode check for now.</br>
