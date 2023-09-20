@@ -2,6 +2,9 @@
 
 This is a tool to manipulate the DllCharacteristics field of a binary.
 </br>You can set/remove ASLR, DEP and Authenticode check for now.
+</br>The the executable file is located on Releases tab.
+</br>
+</br>## Usage:
 </br>
 </br>To see the usage, execute only the executable on your terminal.
 </br>**.\DllCharacteristicsChanger.exe**
@@ -12,8 +15,7 @@ This is a tool to manipulate the DllCharacteristics field of a binary.
 </br>And to see the currently value of the field, you can use DllCharacteristicsChanger.exe <executable.exe>
 </br>**.\DllCharacteristicsChanger.exe <executable.exe>**
 </br>
-</br>You will find the executable file on Releases tab.
-</br>
+</br>## Contact:
 </br>
 </br>Feel free to reach me on X/Twitter, [@CryptDeriveKey](https://twitter.com/CryptDeriveKey).
 </br>Have a nice day!
