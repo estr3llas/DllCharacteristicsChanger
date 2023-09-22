@@ -11,7 +11,7 @@ To view the usage, execute only the executable on your terminal.</br>
 To view the options, you can use  DllCharacteristicsChanger.exe --help</br>
 **.\DllCharacteristicsChanger.exe --help**
 
-And to view the the currently value of the field, you can use DllCharacteristicsChanger.exe <executable.exe></br>
+And to view the currently value of the field, you can use DllCharacteristicsChanger.exe <executable.exe></br>
 **.\DllCharacteristicsChanger.exe <executable.exe>**
 
 ## Contact:
