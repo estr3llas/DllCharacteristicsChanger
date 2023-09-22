@@ -1,3 +1,5 @@
+#pragma once
+
 #include <windows.h>
 #include <stdio.h>
 #include <winnt.h>
@@ -6,15 +8,9 @@
 #include <inttypes.h>
 #include <string.h>
 
-typedef struct {
-	int setASLR;
-	int removeASLR;
-	int setDEP;
-	int removeDEP;
-	int setFINTEGRIY;
-	int removeFINTEGRITY;
-	int showHelp;
-} SelectedOptions;
+#include ".\Options.h"
+#include ".\usage_help.h"
+#include ".\selectedoptions.h"
 
 HANDLE OpenFile(char filename[50]);
 BOOL checkMZ(HANDLE hFile);
@@ -22,31 +18,8 @@ char* readPEData(HANDLE hFile, DWORD fileSize);
 BOOL overwriteNewOptionalHeader(HANDLE hFile, char* PEfileData, PIMAGE_OPTIONAL_HEADER OptionalHeader, PIMAGE_DOS_HEADER Dos, DWORD fileSize);
 void extractPEHeaders(char* PEfileData, PIMAGE_DOS_HEADER* Dos, PIMAGE_NT_HEADERS* Nt, PIMAGE_FILE_HEADER* FileHeader, PIMAGE_OPTIONAL_HEADER* Optional);
 
-SelectedOptions processOptions(int argc, char* argv[]);
-void usageTxt();
-void helpTxt();
-
-BOOL setASLR(PIMAGE_OPTIONAL_HEADER Optional);
-BOOL removeASLR(PIMAGE_OPTIONAL_HEADER Optional);
-
-BOOL setDEP(PIMAGE_OPTIONAL_HEADER Optional);
-BOOL removeDEP(PIMAGE_OPTIONAL_HEADER Optional);
-
-BOOL setFINTEGRITY(PIMAGE_OPTIONAL_HEADER Optional);
-BOOL removeFINTEGRITY(PIMAGE_OPTIONAL_HEADER Optional);
-/* TO DO: other options */
-
-
 #define AUTHOR "spyw4re"
 #define MZ "MZ"
-#define OPTION_SET_ASLR "-sA"
-#define OPTION_REMOVE_ASLR "-rA"
-#define OPTION_SET_DEP "-sD"
-#define OPTION_REMOVE_DEP "-rD"
-#define OPTION_SET_FINTEGRITY "-sI"
-#define OPTION_REMOVE_FINTEGRITY "-rI"
-#define OPTION_SHOW_HELP "--help"
-
 
 int main(int argc, char* argv[]) {
 
@@ -84,7 +57,7 @@ int main(int argc, char* argv[]) {
 	DWORD fileSize = GetFileSize(hFile, NULL);
 
 	if (fileSize == INVALID_FILE_SIZE) {
-		printf("\nError getting file size. Error code: %ld", GetLastError());
+		printf("\nError getting file size. Error code: %" PRId32, GetLastError());
 		CloseHandle(hFile);
 		return EXIT_FAILURE;
 	}
@@ -139,9 +112,6 @@ int main(int argc, char* argv[]) {
 		puts("\t[+] Authenticode check removed!\n");
 	}
 
-
-	printf("[+] DllCharacteristics value: 0x%X", Optional->DllCharacteristics);
-
 	/* Overwrite the provided file with the new DllCharacteristics */
 	BOOL overwriteSuccess = overwriteNewOptionalHeader(hFile, PEfileData, Optional, Dos, fileSize);
 
@@ -151,6 +121,8 @@ int main(int argc, char* argv[]) {
 		CloseHandle(hFile);
 		return EXIT_FAILURE;
 	}
+
+	printf("[+] DllCharacteristics value: 0x%" PRIX32, Optional->DllCharacteristics);
 
 	/* FINISHED! */
 	free(PEfileData);
@@ -179,7 +151,7 @@ HANDLE OpenFile(char filename[50]) {
 			printf("\nAccess to %s is denied.\n", filename);
 		}
 		else {
-			printf("\nFailed to open the file %s. Error code: %ld\n", filename, errorCode);
+			printf("\nFailed to open the file %s. Error code: %" PRId32 "\n", filename, errorCode);
 		}
 	}
 
@@ -197,7 +169,7 @@ BOOL checkMZ(HANDLE hFile) {
 		&bytesRead,
 		NULL
 	)) {
-		printf("\nUnable to read the file. Error code: %ld", GetLastError());
+		printf("\nUnable to read the file. Error code: %" PRId32, GetLastError());
 		return FALSE;
 	}
 
@@ -226,7 +198,7 @@ char* readPEData(HANDLE hFile, DWORD fileSize) {
 		&bytesRead,
 		NULL
 	)) {
-		printf("\nError reading the file data. Error code: %ld\n", GetLastError());
+		printf("\nError reading the file data. Error code: %l" PRId32 "n", GetLastError());
 		CloseHandle(hFile);
 		free(PEfileData);
 		return NULL;
@@ -249,7 +221,7 @@ BOOL overwriteNewOptionalHeader(HANDLE hFile, char* PEfileData, PIMAGE_OPTIONAL_
 		&bytesRead,
 		NULL
 	)) {
-		printf("\nError writing the modified data back to the file. Error code: %ld\n", GetLastError());
+		printf("\nError writing the modified data back to the file. Error code: %" PRId32 "\n", GetLastError());
 		CloseHandle(hFile);
 		free(PEfileData);
 		return FALSE;
@@ -263,121 +235,4 @@ void extractPEHeaders(char* PEfileData, PIMAGE_DOS_HEADER* Dos, PIMAGE_NT_HEADER
 	*Nt = (PIMAGE_NT_HEADERS)((DWORD_PTR)*Dos + (*Dos)->e_lfanew);
 	*FileHeader = &((*Nt)->FileHeader);
 	*Optional = &((*Nt)->OptionalHeader);
-}
-
-SelectedOptions processOptions(int argc, char* argv[]) {
-	SelectedOptions selectedOptions;
-	memset(&selectedOptions, 0, sizeof(SelectedOptions));
-
-	for (int i = 1; i < argc; i++) {
-		if (strcmp(argv[i], OPTION_SET_ASLR) == 0) {
-			selectedOptions.setASLR = 1;
-		}
-		else if (strcmp(argv[i], OPTION_REMOVE_ASLR) == 0) {
-			selectedOptions.removeASLR = 1;
-		}
-		else if (strcmp(argv[i], OPTION_SET_DEP) == 0) {
-			selectedOptions.setDEP = 1;
-		}
-		else if (strcmp(argv[i], OPTION_REMOVE_DEP) == 0) {
-			selectedOptions.removeDEP = 1;
-		}
-		else if (strcmp(argv[i], OPTION_SET_FINTEGRITY) == 0) {
-			selectedOptions.setFINTEGRIY = 1;
-		}
-		else if (strcmp(argv[i], OPTION_REMOVE_FINTEGRITY) == 0) {
-			selectedOptions.removeFINTEGRITY = 1;
-		}
-		else if (strcmp(argv[i], OPTION_SHOW_HELP) == 0) {
-			selectedOptions.showHelp = 1;
-		}
-	}
-
-	return selectedOptions;
-}
-
-
-void helpTxt() {
-	puts("[i] DllCharacteristicsChanger v0.0.1");
-	puts("[i]This is a tool to manipulate DllCharacteristics field of a binary.\n");
-	puts("[i] Options:");
-	puts("\t-sA,    Set ASLR <IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040> flag");
-	puts("\t-rA,    Remove ASLR <IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040> flag");
-	puts("\t-sN,    Set DEP <IMAGE_DLLCHARACTERISTICS_NX_COMPAT 0x0100> flag");
-	puts("\t-rN,    Remove DEP <IMAGE_DLLCHARACTERISTICS_NX_COMPAT 0x0100> flag");
-	puts("\t-sI,    Set Authenticode Check <IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY 0x0080> flag");
-	puts("\t-rI,    Remove Authenticode Check <IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY 0x0080> flag");
-}
-void usageTxt() {
-
-	puts("[*] DllCharacteristicsChanger v0.0.1");
-	puts("[*] This is a tool to enable/disable ASLR <IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE>, DEP <IMAGE_DLLCHARACTERISTICS_NX_COMPAT> and Authenticode Signing <IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY> on your binary!");
-	puts("\n\t[i] Usage: DllCharacteristicsChanger.exe <file.exe> --help/-h");
-	puts("\n[!] Created by: @CryptDeriveKey.");
-}
-
-BOOL setASLR(PIMAGE_OPTIONAL_HEADER Optional) {
-
-	if (!Optional) {
-		perror("\n[-]Unable to set ASLR\n[-]Invalid Optional Header");
-		return FALSE;
-	}
-
-	Optional->DllCharacteristics |= IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE;
-	return TRUE;
-}
-
-BOOL removeASLR(PIMAGE_OPTIONAL_HEADER Optional) {
-
-	if (!Optional) {
-		perror("\n[-]Unable to remove ASLR\n[-]Invalid Optional Header");
-		return FALSE;
-	}
-
-	Optional->DllCharacteristics &= ~IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE;
-	return TRUE;
-}
-
-BOOL setDEP(PIMAGE_OPTIONAL_HEADER Optional) {
-
-	if (!Optional) {
-		perror("\n[-]Unable to set DEP\n[-]Invalid Optional Header");
-		return FALSE;
-	}
-
-	Optional->DllCharacteristics |= IMAGE_DLLCHARACTERISTICS_NX_COMPAT;
-	return TRUE;
-}
-
-BOOL removeDEP(PIMAGE_OPTIONAL_HEADER Optional) {
-
-	if (!Optional) {
-		perror("\n[-]Unable to remove DEP\n[-]Invalid Optional Header");
-		return FALSE;
-	}
-
-	Optional->DllCharacteristics &= ~IMAGE_DLLCHARACTERISTICS_NX_COMPAT;
-	return TRUE;
-}
-
-BOOL setFINTEGRITY(PIMAGE_OPTIONAL_HEADER Optional) {
-
-	if (!Optional) {
-		perror("\n[-]Unable to set Authenticode check\n[-]Invalid Optional Header");
-		return FALSE;
-	}
-
-	Optional->DllCharacteristics |= IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY;
-	return TRUE;
-}
-
-BOOL removeFINTEGRITY(PIMAGE_OPTIONAL_HEADER Optional) {
-
-	if (!Optional) {
-		perror("\n[-]Unable to remove Authenticode check\n[-]Invalid Optional Header");
-		return FALSE;
-	}
-
-	Optional->DllCharacteristics &= ~IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY;
-	return TRUE;
 }

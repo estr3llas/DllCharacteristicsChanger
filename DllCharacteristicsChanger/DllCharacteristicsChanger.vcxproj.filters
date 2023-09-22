@@ -13,10 +13,39 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Arquivos de Origem\Usage_help">
+      <UniqueIdentifier>{d7e02507-b39e-450b-9446-950a110e5f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Origem\Options">
+      <UniqueIdentifier>{8b693338-ed59-4d89-9329-68dd44e494d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Origem\Selected_Options">
+      <UniqueIdentifier>{30401d5c-c463-4cfb-97bc-e7a8e7b85644}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllCharacteristicsChanger.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="options.cpp">
+      <Filter>Arquivos de Origem\Options</Filter>
+    </ClCompile>
+    <ClCompile Include="usage_help.cpp">
+      <Filter>Arquivos de Origem\Usage_help</Filter>
+    </ClCompile>
+    <ClCompile Include="selectedoptions.cpp">
+      <Filter>Arquivos de Origem\Selected_Options</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="options.h">
+      <Filter>Arquivos de Origem\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="usage_help.h">
+      <Filter>Arquivos de Origem\Usage_help</Filter>
+    </ClInclude>
+    <ClInclude Include="selectedoptions.h">
+      <Filter>Arquivos de Origem\Selected_Options</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
