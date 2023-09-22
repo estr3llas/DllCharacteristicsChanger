@@ -8,9 +8,9 @@
 #include <inttypes.h>
 #include <string.h>
 
-#include ".\Options.h"
-#include ".\usage_help.h"
-#include ".\selectedoptions.h"
+#include ".\Options\options.h"
+#include ".\Usage_Help\usage_help.h"
+#include ".\SelectedOptions\selectedoptions.h"
 
 HANDLE OpenFile(char filename[50]);
 BOOL checkMZ(HANDLE hFile);

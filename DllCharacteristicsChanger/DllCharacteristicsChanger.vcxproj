@@ -128,14 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DllCharacteristicsChanger.cpp" />
-    <ClCompile Include="options.cpp" />
-    <ClCompile Include="selectedoptions.cpp" />
-    <ClCompile Include="usage_help.cpp" />
+    <ClCompile Include="Options\options.cpp" />
+    <ClCompile Include="SelectedOptions\selectedoptions.cpp" />
+    <ClCompile Include="Usage_Help\usage_help.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="options.h" />
-    <ClInclude Include="selectedoptions.h" />
-    <ClInclude Include="usage_help.h" />
+    <ClInclude Include="Options\options.h" />
+    <ClInclude Include="SelectedOptions\selectedoptions.h" />
+    <ClInclude Include="Usage_Help\usage_help.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
