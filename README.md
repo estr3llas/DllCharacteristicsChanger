@@ -4,6 +4,8 @@ This is a tool to manipulate the DllCharacteristics field of a binary.</br>
 You can set/remove ASLR, DEP and Authenticode check for now.</br>
 The executable file is located on Releases tab.</br>
 
+trusted sha256: `520f16aeedb37b7a93b87508063538a928dc797686e146e27de0edcf3d3dea48`</br>
+
 ## Usage:
 To view the usage, execute only the executable on your terminal.</br>
 **.\DllCharacteristicsChanger.exe**
